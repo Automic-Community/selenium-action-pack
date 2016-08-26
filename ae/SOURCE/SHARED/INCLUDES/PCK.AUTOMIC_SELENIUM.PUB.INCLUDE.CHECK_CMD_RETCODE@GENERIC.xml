@@ -16,7 +16,7 @@
 : ENDSWITCH]]></MSCRI>
 </SCRIPT>
 <DOCU_Docu state="1" type="text">
-<DOC/>
+<DOC><![CDATA[This include consists of both windows and unix command to verify the executed command's return code. ]]></DOC>
 </DOCU_Docu>
 </JOBI>
 </uc-export>

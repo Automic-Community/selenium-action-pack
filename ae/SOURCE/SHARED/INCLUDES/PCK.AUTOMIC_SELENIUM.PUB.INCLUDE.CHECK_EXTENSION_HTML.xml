@@ -31,7 +31,7 @@
 : ENDIF]]></MSCRI>
 </SCRIPT>
 <DOCU_Docu state="1" type="text">
-<DOC/>
+<DOC><![CDATA[This include check for the given file against the extension html, htm, xhtml.]]></DOC>
 </DOCU_Docu>
 </JOBI>
 </uc-export>

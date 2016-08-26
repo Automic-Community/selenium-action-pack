@@ -14,7 +14,7 @@ then
 fi]]></MSCRI>
 </SCRIPT>
 <DOCU_Docu state="1" type="text">
-<DOC/>
+<DOC><![CDATA[Verify executed command's return code on unix.]]></DOC>
 </DOCU_Docu>
 </JOBI>
 </uc-export>

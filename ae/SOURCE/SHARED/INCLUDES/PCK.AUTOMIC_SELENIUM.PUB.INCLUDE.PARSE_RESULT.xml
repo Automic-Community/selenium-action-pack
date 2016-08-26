@@ -22,7 +22,7 @@
 : ENDIF]]></MSCRI>
 </SCRIPT>
 <DOCU_Docu state="1" type="text">
-<DOC/>
+<DOC><![CDATA[This include is used to parse the html/htm/xhtml file and get the value for the given tag.]]></DOC>
 </DOCU_Docu>
 </JOBI>
 </uc-export>
