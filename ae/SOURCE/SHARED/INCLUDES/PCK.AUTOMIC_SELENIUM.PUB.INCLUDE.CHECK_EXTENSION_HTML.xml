@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
+<JOBI name="PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_EXTENSION_HTML">
+<HEADER state="1">
+<Title/>
+<ArchiveKey1/>
+<ArchiveKey2/>
+<OH_SubType/>
+</HEADER>
+<SCRIPT mode="1" state="1">
+<MSCRI><![CDATA[: SET &UC4RB_TEMP_STRING# = STR_LC(&UC4RB_FILE_PATH#)
+
+: SET &COUNT# = 0
+
+: SET &CHECK_EXTENSION# = STR_ENDS_WITH(&UC4RB_TEMP_STRING#, ".html")
+: IF &CHECK_EXTENSION# EQ "Y"
+:        SET &COUNT# = &COUNT# + 1
+: ENDIF
+
+: SET &CHECK_EXTENSION# = STR_ENDS_WITH(&UC4RB_TEMP_STRING#, ".htm")
+: IF &CHECK_EXTENSION# EQ "Y"
+:        SET &COUNT# = &COUNT# + 1
+: ENDIF
+
+: SET &CHECK_EXTENSION# = STR_ENDS_WITH(&UC4RB_TEMP_STRING#, ".xhtml")
+: IF &CHECK_EXTENSION# EQ "Y"
+:        SET &COUNT# = &COUNT# + 1
+: ENDIF
+
+: IF &COUNT# NE 1
+:       STOP MSG, 51, "Invalid file type [&UC4RB_TEMP_STRING#]"
+: ENDIF]]></MSCRI>
+</SCRIPT>
+<DOCU_Docu state="1" type="text">
+<DOC/>
+</DOCU_Docu>
+</JOBI>
+</uc-export>
