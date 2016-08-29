@@ -19,7 +19,7 @@
 :ENDIF]]></MSCRI>
 </SCRIPT>
 <DOCU_Docu state="1" type="text">
-<DOC/>
+<DOC><![CDATA[This include changes the curretn working directory to agent's temp directory.]]></DOC>
 </DOCU_Docu>
 </JOBI>
 </uc-export>

@@ -24,7 +24,7 @@ Selenium Server Standalone 2.53.1
 
 * The Agent should have the selenium standalone server jar.
 
-* To run the suite file, both suite and related html/htm/xhtml.
+* To run the suite file, both suite and related html/htm/xhtml should be available on the agent machine.
 
 =Actions=
 
