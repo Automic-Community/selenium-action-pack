@@ -273,6 +273,10 @@
 <POST_SCRIPT mode="1" replacementmode="1" state="1">
 <OSCRI><![CDATA[! Publishing output file path in case of success
 
+:   PSET &UC4RB_SLM_RESULT_FILE_PATH# = ""
+:   PSET &UC4RB_SLM_TOTAL_TEST_CASES# =""
+:   PSET &UC4RB_SLM_PASSED_CASES# =""
+:   PSET &UC4RB_SLM_FAILED_CASES# =""
 :PSET &STATUS# = GET_UC_OBJECT_STATUS(,,"RETCODE")
 :IF &STATUS#  = 0
 
@@ -284,40 +288,35 @@
 :             IF &KEY# = "UC4RB_SLM_RESULT_FILE_PATH"
 :                   SET &UC4RB_SLM_RESULT_FILE_PATH# = "&VALUE#"
 :                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"TOP"
+
+!                    Publishing total no. of cases, successful cases and failure cases
+:                    SET &UC4RB_SLM_FILE_PATH# = &UC4RB_SLM_RESULT_FILE_PATH#
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.READ_FILE
+
+:                    SET &UC4RB_SLM_CONTENT# = &UC4RB_SLM_FILE_CONTENT#
+
+!                    get total number of test cases executed
+:                    SET &UC4RB_SLM_NODE# = "<td>numTestTotal:</td>"
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
+:                    SET &UC4RB_SLM_TOTAL_TEST_CASES# = &UC4RB_SLM_VALUE#
+:                    PUBLISH &UC4RB_SLM_TOTAL_TEST_CASES#,,"WORKFLOW"
+
+!                    get total number of cases that has passed
+:                    SET &UC4RB_SLM_NODE# = "<td>numTestPasses:</td>"
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
+:                    SET &UC4RB_SLM_PASSED_CASES# = &UC4RB_SLM_VALUE#
+:                    PUBLISH &UC4RB_SLM_PASSED_CASES#,,"WORKFLOW"
+
+!                    get total number of cases that has failed
+:                    SET &UC4RB_SLM_NODE# = "<td>numTestFailures:</td>"
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
+:                    SET &UC4RB_SLM_FAILED_CASES# = &UC4RB_SLM_VALUE#
+:                    PUBLISH &UC4RB_SLM_FAILED_CASES#,,"WORKFLOW"
+
 :                   TERM_PROCESS
 :             ENDIF
 :      ENDPROCESS
 :      CLOSE_PROCESS &HND#
-
-!      Publishing total no. of cases, successful cases and failure cases
-:      SET &UC4RB_SLM_FILE_PATH# = &RESULT_TEMPFILE#
-:      INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.READ_FILE
-
-:      SET &UC4RB_SLM_CONTENT# = &UC4RB_SLM_FILE_CONTENT#
-
-!      get total number of test cases executed
-:      SET &UC4RB_SLM_NODE# = "<td>numTestTotal:</td>"
-:      INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
-:      SET &UC4RB_SLM_TOTAL_TEST_CASES# = &UC4RB_SLM_VALUE#
-:      PUBLISH &UC4RB_SLM_TOTAL_TEST_CASES#,,"WORKFLOW"
-
-!      get total number of cases that has passed
-:      SET &UC4RB_SLM_NODE# = "<td>numTestPasses:</td>"
-:      INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
-:      SET &UC4RB_SLM_PASSED_CASES# = &UC4RB_SLM_VALUE#
-:      PUBLISH &UC4RB_SLM_PASSED_CASES#,,"WORKFLOW"
-
-!      get total number of cases that has failed
-:      SET &UC4RB_SLM_NODE# = "<td>numTestFailures:</td>"
-:      INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
-:      SET &UC4RB_SLM_FAILED_CASES# = &UC4RB_SLM_VALUE#
-:      PUBLISH &UC4RB_SLM_FAILED_CASES#,,"WORKFLOW"
-
-:ELSE
-:   PSET &UC4RB_SLM_RESULT_FILE_PATH# = ""
-:   PSET &UC4RB_SLM_TOTAL_TEST_CASES# =""
-:   PSET &UC4RB_SLM_PASSED_CASES# =""
-:   PSET &UC4RB_SLM_FAILED_CASES# =""
 :ENDIF]]></OSCRI>
 </POST_SCRIPT>
 <DOCU_Docu state="1" type="text">
