@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
+<DOCU name="PCK.AUTOMIC_SELENIUM.PUB.DOC">
+<HEADER state="1">
+<Title>Package documentation</Title>
+<ArchiveKey1/>
+<ArchiveKey2/>
+<OH_SubType/>
+</HEADER>
+<DOCU_Docu state="1" type="text">
+<DOC><![CDATA[About Automic's Selenium Package
+================================
+Selenium is a portable software testing framework for web applications. It is a set of different software tools each with a different approach to supporting test automation.
+This package provides the following functionality:
+* Run test suite : to run a single test suite with as many test files.
+
+=Supported versions=
+Selenium Server Standalone 2.53.1 
+ 
+=Limitations=
+(none)
+
+=Setup=
+* Oracle JDK 1.7 or higher must be installed on Agent OS and "java" must be set as executable on the same.
+
+* The Agent should have the selenium standalone server jar.
+
+* To run the suite file, both suite and related html/htm/xhtml should be available on the agent machine.
+
+=Actions=
+
+Following actions are supported:
+
+* Action Name: PCK.AUTOMIC_SELENIUM.PUB.ACTION.RUN_TEST_SUITE
+* Action Description: This action is used to run a test suite on the specified browser. User can give options other than -htmlsuite in the "Advanced Options" section.]]></DOC>
+</DOCU_Docu>
+</DOCU>
+</uc-export>

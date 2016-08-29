@@ -1,0 +1,3 @@
+*** Variables ***
+#---- AE Actions-------------------------
+${_RUN_TEST_SUITE_ACTION}    PCK.AUTOMIC_SELENIUM.PUB.ACTION.RUN_TEST_SUITE
