@@ -101,10 +101,9 @@
     SET ERROR=0
 : ELSE
     error=0
+:   DEFINE &STRING_ARR#, string, 30
+:   INC PCK.ITPA_SHARED.PUB.INCLUDE.SUDOERS_HEADER
 : ENDIF
-
-: DEFINE &STRING_ARR#, string, 30
-: INC PCK.ITPA_SHARED.PUB.INCLUDE.SUDOERS_HEADER
 
 !------------------------------------------ LOGGING INPUT PARAMETERS --------------------------------------------------------------
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.HEADER.PARAM_VALIDATION
@@ -124,8 +123,8 @@
 : SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_RESULT_FILE#"
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
 
-! AUT Url
-: SET &UC4RB_LOGGING_PARAMETER# = "AUT Url"
+! AUT URL
+: SET &UC4RB_LOGGING_PARAMETER# = "AUT URL"
 : SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_AUT_URL#"
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
 
@@ -143,22 +142,18 @@
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.HEADER.EXECUTION
 
 !------------------------------------ Validation of files -----------------------------------------------------------------------------------
+: SET &AGENT_TEMPDIR# = GET_VAR('UC_EX_PATH_TEMP', &AGENT#)
+
+! changing the directory to agent's temp directory
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHANGE_DIRECTORY_TO_AGENT_TEMP@GENERIC
 
 !----------------- Selenium server path validation-----------------------------
-! check if the file is a jar
-: SET &CHECK_EXTENSION# = STR_ENDS_WITH(&UC4RB_SLM_SERVER_FILE#, ".jar")
-: IF &CHECK_EXTENSION# EQ "Y"
-!       check if the file path is valid
-:       SET &UC4RB_CHECKME# = &UC4RB_SLM_SERVER_FILE#
-:       INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_FILE_EXISTS
-: ELSE
-:       STOP MSG, 51, "Invalid file type [&UC4RB_SLM_SERVER_FILE#]"
-: ENDIF
+
+! check if the file path is valid
+: SET &UC4RB_CHECKME# = &UC4RB_SLM_SERVER_FILE#
+: INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_FILE_EXISTS
 
 ! ----------------- Test suite file validation--------------------------------
-! check if the file is html, htm or xhtml
-: SET &UC4RB_FILE_PATH# = &UC4RB_SLM_SUITE_FILE#
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_EXTENSION_HTML
 
 ! check if the file path is valid
 : SET &UC4RB_CHECKME# = &UC4RB_SLM_SUITE_FILE#
@@ -167,15 +162,10 @@
 ! ----------------- Test result file validation---------------------------------
 : IF &UC4RB_SLM_RESULT_FILE# = ""
 !      getting the temp directory of agent
-:      SET &AGENT_TEMPDIR# = GET_VAR('UC_EX_PATH_TEMP', &AGENT#)
 :      PSET &RESULT_TEMPFILE# = STR_CAT(&AGENT_TEMPDIR#,'testresult-&$RUNID#.html')
 : ELSE
 :      PSET &RESULT_TEMPFILE# = &UC4RB_SLM_RESULT_FILE#
 : ENDIF
-
-! check if the file is html, htm or xhtml
-: SET &UC4RB_FILE_PATH# = &RESULT_TEMPFILE#
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_EXTENSION_HTML
 
 ! getting the directory where the result file should be created
 : SWITCH &$PLATFORM#
@@ -201,15 +191,20 @@
 
 : SWITCH &$PLATFORM#
 :     CASE "WINDOWS"
-              IF EXIST &UC4RB_ESCAPED_STRING# (
-                    del -Force &RESULT_TEMPFILE#
+              IF EXIST &TEST_RESULT_FILE# (
+                    del &RESULT_TEMPFILE#
               )
+              SET ERROR=%ERRORLEVEL%
 :     CASE "UNIX"
-              if [ -f &UC4RB_ESCAPED_STRING# ]
+              if [ -f &TEST_RESULT_FILE# ]
               then
-                    rm -f &RESULT_TEMPFILE#
+                    rm &RESULT_TEMPFILE#
+                    error=$?
               fi
 : ENDSWITCH
+
+: SET &UC4RB_LOGGING_ERROR# = "Unable to delete the test result file."
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE@GENERIC
 
 !---------------------------------- Creating command to execute test suite ------------------------------
 
@@ -226,7 +221,7 @@
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
 : SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " -htmlSuite &UC4RB_ESCAPED_STRING#")
 
-! AUT Url
+! AUT URL
 : SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_AUT_URL#
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
 : SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING#")
@@ -236,22 +231,27 @@
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
 : SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING# &TEST_RESULT_FILE# &UC4RB_SLM_OPTIONS#")
 
-: SET &LOGGING_COMMAND# = '&UC4RB_SLM_RUN_CMD#'
+: SET &LOGGING_COMMAND# = &UC4RB_SLM_RUN_CMD#
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.LOGGING_COMMAND
   &UC4RB_SLM_RUN_CMD#
 
-! check error and if the result file exist
+
+! get absolute path, check error and if the result file exist
 : IF &UC4RB_AGENT_OS# = "WINDOWS"
       SET ERROR=%ERRORLEVEL%
       IF NOT EXIST &TEST_RESULT_FILE# (
             SET ERROR=1
       )
+      echo UC4RB_SLM_RESULT_FILE_PATH::=&RESULT_TEMPFILE#
 : ELSE
       error=$?
+      tmp_filename=$(basename "&RESULT_TEMPFILE#")
+      outputfilepath=$(pwd -P)/"${tmp_filename}"
       if [ ! -f &TEST_RESULT_FILE# ]
       then
             error=1
       fi
+      echo "UC4RB_SLM_RESULT_FILE_PATH::=$outputfilepath"
 : ENDIF
 
 !-------------------------------------------ERROR MESSAGE--------------------------------------------------------------------------------
@@ -275,8 +275,20 @@
 
 :PSET &STATUS# = GET_UC_OBJECT_STATUS(,,"RETCODE")
 :IF &STATUS#  = 0
-:      SET &UC4RB_SLM_RESULT_FILE_PATH# = &RESULT_TEMPFILE#
-:      PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"WORKFLOW"
+
+!      get the report file
+:      SET &HND# = PREP_PROCESS_REPORT("JOBS",, "REP",,"COL=DELIMITER", 'DELIMITER=*::=*')
+:      PROCESS &HND#
+:             SET &KEY# = GET_PROCESS_LINE(&HND#,1)
+:             SET &VALUE# = GET_PROCESS_LINE(&HND#,2)
+:             IF &KEY# = "UC4RB_SLM_RESULT_FILE_PATH"
+:                   SET &UC4RB_SLM_RESULT_FILE_PATH# = "&VALUE#"
+:                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"TOP"
+:                   TERM_PROCESS
+:             ENDIF
+:      ENDPROCESS
+:      CLOSE_PROCESS &HND#
+
 !      Publishing total no. of cases, successful cases and failure cases
 :      SET &UC4RB_SLM_FILE_PATH# = &RESULT_TEMPFILE#
 :      INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.READ_FILE
