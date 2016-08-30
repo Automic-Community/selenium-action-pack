@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
-<JOBS_GENERIC AttrType="GENERIC" name="PCK.AUTOMIC_SELENIUM.PRV.JOB.RUN_TEST_SUITE@GENERIC">
+<JOBS_WINDOWS AttrType="WINDOWS" name="PCK.AUTOMIC_SELENIUM.PRV.JOB.RUN_TEST_SUITE@WINDOWS">
 <XHEADER state="1">
 <Title>Run test suite</Title>
 <ArchiveKey1/>
@@ -17,8 +17,8 @@
 <ATTR_JOBS state="1">
 <Queue>CLIENT_QUEUE</Queue>
 <StartType/>
-<HostDst>|&lt;GENERIC&gt;|HOST</HostDst>
-<HostATTR_Type>GENERIC</HostATTR_Type>
+<HostDst>|&lt;WIN&gt;|HOST</HostDst>
+<HostATTR_Type>WINDOWS</HostATTR_Type>
 <CodeName/>
 <Login/>
 <IntAccount/>
@@ -40,6 +40,25 @@
 <MpElse2>0</MpElse2>
 <TZ/>
 </ATTR_JOBS>
+<ATTR_WINDOWS state="1">
+<OutputDb>1</OutputDb>
+<OutputDbErr>0</OutputDbErr>
+<OutputFile>0</OutputFile>
+<IsGenerated>0</IsGenerated>
+<BAT>1</BAT>
+<COM>0</COM>
+<WinBatch>0</WinBatch>
+<Standard>1</Standard>
+<Minimized>0</Minimized>
+<Maximized>0</Maximized>
+<JObjDefault>1</JObjDefault>
+<JObjYes>0</JObjYes>
+<JObjNo>0</JObjNo>
+<WorkingDirectory>c:\</WorkingDirectory>
+<Command/>
+<LogOn>0</LogOn>
+<ShowJob>0</ShowJob>
+</ATTR_WINDOWS>
 <RUNTIME state="1">
 <MaxRetCode>0</MaxRetCode>
 <MrcExecute/>
@@ -96,14 +115,8 @@
 <PSCRI><![CDATA[:INC PCK.ITPA_SHARED.PUB.INCLUDE.START_STOP_JOB_ACCORDING_TO_AGENT_OS]]></PSCRI>
 </PRE_SCRIPT>
 <SCRIPT mode="1" state="1">
-<MSCRI><![CDATA[: IF &$PLATFORM# EQ "WINDOWS"
-    @echo off
-    SET ERROR=0
-: ELSE
-    error=0
-:   DEFINE &STRING_ARR#, string, 30
-:   INC PCK.ITPA_SHARED.PUB.INCLUDE.SUDOERS_HEADER
-: ENDIF
+<MSCRI><![CDATA[@echo off
+SET ERROR=0
 
 !------------------------------------------ LOGGING INPUT PARAMETERS --------------------------------------------------------------
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.HEADER.PARAM_VALIDATION
@@ -123,8 +136,8 @@
 : SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_RESULT_FILE#"
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
 
-! AUT URL
-: SET &UC4RB_LOGGING_PARAMETER# = "AUT URL"
+! Application URL
+: SET &UC4RB_LOGGING_PARAMETER# = "Application URL"
 : SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_AUT_URL#"
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
 
@@ -141,39 +154,33 @@
 ! logging start of execution
 : INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.HEADER.EXECUTION
 
-!------------------------------------ Validation of files -----------------------------------------------------------------------------------
+!------------------changing the directory to agent's temp directory------------------------------------------------
 : SET &AGENT_TEMPDIR# = GET_VAR('UC_EX_PATH_TEMP', &AGENT#)
+  cd /d "&AGENT_TEMPDIR#"
+: SET &UC4RB_LOGGING_ERROR# = "Unable to change the directory to agent's temp directory"
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
 
-! changing the directory to agent's temp directory
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHANGE_DIRECTORY_TO_AGENT_TEMP@GENERIC
+!------------------------------------ Validation of files -----------------------------------------------------------------------------------
 
-!----------------- Selenium server path validation-----------------------------
-
-! check if the file path is valid
+! ------------------ (Selenium server path)-------------------
 : SET &UC4RB_CHECKME# = &UC4RB_SLM_SERVER_FILE#
 : INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_FILE_EXISTS
 
-! ----------------- Test suite file validation--------------------------------
-
-! check if the file path is valid
+! -------------------- (Test suite file)------------------------
 : SET &UC4RB_CHECKME# = &UC4RB_SLM_SUITE_FILE#
 : INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_FILE_EXISTS
 
-! ----------------- Test result file validation---------------------------------
+! ---------------------(Test result file)---------------------
 : IF &UC4RB_SLM_RESULT_FILE# = ""
 !      getting the temp directory of agent
-:      PSET &RESULT_TEMPFILE# = STR_CAT(&AGENT_TEMPDIR#,'testresult-&$RUNID#.html')
+:      SET &RESULT_TEMPFILE# = STR_CAT(&AGENT_TEMPDIR#,'testresult-&$RUNID#.html')
 : ELSE
-:      PSET &RESULT_TEMPFILE# = &UC4RB_SLM_RESULT_FILE#
+:      SET &RESULT_TEMPFILE# = &UC4RB_SLM_RESULT_FILE#
 : ENDIF
 
 ! getting the directory where the result file should be created
-: SWITCH &$PLATFORM#
-:     CASE "WINDOWS"
-:             SET &POS# = STR_FIND_REVERSE(&RESULT_TEMPFILE#,"\")
-:     CASE "UNIX"
-:             SET &POS# = STR_FIND_REVERSE(&RESULT_TEMPFILE#,"/")
-: ENDSWITCH
+: SET &RESULT_TEMPFILE# = STR_SUB(&RESULT_TEMPFILE#, "/", "\")
+: SET &POS# = STR_FIND_REVERSE(&RESULT_TEMPFILE#,"\")
 : IF &POS# GT 0
 :     SET &LEN# = STR_LENGTH(&RESULT_TEMPFILE#)
 :     SET &POS# = &POS# - 1
@@ -184,27 +191,31 @@
 :     STOP MSG, 51, "Invalid directory [&RESULT_TEMPFILE#]"
 : ENDIF
 
-! delete the file if it already exists
+! escape charcters
 : SET &UC4RB_ESCAPED_STRING# = &RESULT_TEMPFILE#
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
-: SET &TEST_RESULT_FILE# = &UC4RB_ESCAPED_STRING#
+: PSET &TEST_RESULT_FILE# = &UC4RB_ESCAPED_STRING#
 
-: SWITCH &$PLATFORM#
-:     CASE "WINDOWS"
-              IF EXIST &TEST_RESULT_FILE# (
-                    del &RESULT_TEMPFILE#
-              )
-              SET ERROR=%ERRORLEVEL%
-:     CASE "UNIX"
-              if [ -f &TEST_RESULT_FILE# ]
-              then
-                    rm &RESULT_TEMPFILE#
-                    error=$?
-              fi
-: ENDSWITCH
+! change all the "\\" to "\"
+: SET &DEL_FILE# = &TEST_RESULT_FILE#
+: SET &CHECK_SLASH# = 1
+: WHILE &CHECK_SLASH# GT 0
+:      SET &POS# = STR_FIND(&DEL_FILE#,"\\")
+:      IF &POS# GT 0
+:             SET &DEL_FILE# = STR_SUB(&DEL_FILE#, "\\", "\")
+:      ELSE
+:            SET &CHECK_SLASH#=0
+:      ENDIF
+: ENDWHILE
+
+! delete the file if it already exists
+  IF EXIST &DEL_FILE# (
+      del &DEL_FILE#
+  )
+  SET ERROR=%ERRORLEVEL%
 
 : SET &UC4RB_LOGGING_ERROR# = "Unable to delete the test result file."
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE@GENERIC
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
 
 !---------------------------------- Creating command to execute test suite ------------------------------
 
@@ -231,38 +242,45 @@
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
 : SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING# &TEST_RESULT_FILE# &UC4RB_SLM_OPTIONS#")
 
-: SET &LOGGING_COMMAND# = &UC4RB_SLM_RUN_CMD#
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.LOGGING_COMMAND
+  echo  CMDLET: &UC4RB_SLM_RUN_CMD#
   &UC4RB_SLM_RUN_CMD#
 
+!--------------------------------get absolute path, check error and if the result file exist------------------------
+! Check if result file exist
+ IF NOT EXIST &TEST_RESULT_FILE# (
+     SET ERROR=1
+     goto :endfile
+ )
 
-! get absolute path, check error and if the result file exist
-: IF &UC4RB_AGENT_OS# = "WINDOWS"
-      SET ERROR=%ERRORLEVEL%
-      IF NOT EXIST &TEST_RESULT_FILE# (
-            SET ERROR=1
-      )
-      echo UC4RB_SLM_RESULT_FILE_PATH::=&RESULT_TEMPFILE#
-: ELSE
-      error=$?
-      tmp_filename=$(basename "&RESULT_TEMPFILE#")
-      outputfilepath=$(pwd -P)/"${tmp_filename}"
-      if [ ! -f &TEST_RESULT_FILE# ]
-      then
-            error=1
-      fi
-      echo "UC4RB_SLM_RESULT_FILE_PATH::=$outputfilepath"
-: ENDIF
+!check its size
+ call :setsize &TEST_RESULT_FILE#
+ IF %SIZE% LEQ 0 (
+     SET ERROR=1
+     goto :endfile
+  )
 
-!-------------------------------------------ERROR MESSAGE--------------------------------------------------------------------------------
+!get the absolute path
+ call :getabsolutefile "&RESULT_TEMPFILE#"
+ goto :endfile
+
+ :setsize
+     set SIZE=%~z1
+     EXIT /B 0
+
+ :getabsolutefile
+     SET OUTPUTFILEPATH=%~f1
+     echo UC4RB_SLM_RESULT_FILE_PATH::=%OUTPUTFILEPATH%
+     EXIT /B 0
+
+ :endfile
+
+!-------------------------------------------ERROR MESSAGE-------------------------------------------------------------------------------
 : SET &UC4RB_LOGGING_ERROR# = "******** RUN TEST SUITE ACTION FAILED ********"
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE@GENERIC
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
 
 !-------------------------------------------SUCCESS MESSAGE-------------------------------------------------------------------------------
 : SET &UC4RB_LOGGING_INFO# = "******** RUN TEST SUITE ACTION EXECUTED SUCCESSFULLY ********"
-: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO
-
-: INC PCK.ITPA_SHARED.PUB.INCLUDE.SUDOERS_FOOTER]]></MSCRI>
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO]]></MSCRI>
 </SCRIPT>
 <OUTPUTSCAN state="1">
 <Inherit>N</Inherit>
@@ -279,15 +297,16 @@
 :   PSET &UC4RB_SLM_FAILED_CASES# =""
 :PSET &STATUS# = GET_UC_OBJECT_STATUS(,,"RETCODE")
 :IF &STATUS#  = 0
-
 !      get the report file
-:      SET &HND# = PREP_PROCESS_REPORT("JOBS",, "REP",,"COL=DELIMITER", 'DELIMITER=*::=*')
+:      SET &HND# = PREP_PROCESS_REPORT("JOBS",, "REP","UC4RB_SLM_RESULT_FILE_PATH*","COL=DELIMITER", 'DELIMITER=*::=*')
 :      PROCESS &HND#
 :             SET &KEY# = GET_PROCESS_LINE(&HND#,1)
 :             SET &VALUE# = GET_PROCESS_LINE(&HND#,2)
+:             p "key : &KEY#"
+:             p "val : &VALUE#"
 :             IF &KEY# = "UC4RB_SLM_RESULT_FILE_PATH"
 :                   SET &UC4RB_SLM_RESULT_FILE_PATH# = "&VALUE#"
-:                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"TOP"
+:                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"WORKFLOW"
 
 !                    Publishing total no. of cases, successful cases and failure cases
 :                    SET &UC4RB_SLM_FILE_PATH# = &UC4RB_SLM_RESULT_FILE_PATH#
@@ -322,5 +341,5 @@
 <DOCU_Docu state="1" type="text">
 <DOC/>
 </DOCU_Docu>
-</JOBS_GENERIC>
+</JOBS_WINDOWS>
 </uc-export>
