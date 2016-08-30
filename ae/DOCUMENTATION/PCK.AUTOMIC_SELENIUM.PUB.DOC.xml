@@ -14,7 +14,7 @@ This package provides the following functionality:
 * Run test suite : to run a single test suite with as many test files.
 
 =Supported versions=
-Selenium Server Standalone 2.53.1 
+Selenium Server Standalone 2.53
  
 =Limitations=
 (none)
