@@ -3,10 +3,9 @@ Library           com.automic.robot.itpa.ItpaLibrary
 
 *** Variables ***
 #---- AE -------------------------
-@{AE}            AUTOMIC    192.168.112.35    2217    1000/INTEGRATION/SPARTAN    test    # system, host, port, user, pass
+@{AE}             AUTOMIC    192.168.112.35    2217    1000/INTEGRATION/SPARTAN    test    # system, host, port, user, pass
 #---- Promptset Overwrite Agent -------------------------------------------------------------------------
 @{Promptset_Overwrite_Agent_WIN}    WIN01    LOGIN.WIN01
-@{Promptset_Overwrite_Agent_UNIX}    AGENT_UNIX01    LOGIN.AGENT_UNIX01
 #---- GLOBAL CONTEXT VARIABLES --------------------------------------------------------------------------
 ${_AE_SYSTEM}     @{AE}[0]
 ${_AE_HOST}       @{AE}[1]

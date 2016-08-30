@@ -83,7 +83,7 @@ Run Test Suite Template
     [Arguments]    ${OK_NOK}    ${ServerPath}    ${TestSuiteFile}    ${TestResultFile}    ${AUTUrl}    ${Browser_Name}
     ...    ${AdvancedOptions}
     [Documentation]    This test is used to run a test suite on the specified browser.
-    ...    -Precondition: To run this test suite selenium server path should be known to user and change the values of required fields in variable.txt file to run the test cases on UNIX.
+    ...    -Precondition: To run this test suite selenium server path should be known to user.
     ...    -${OK_NOK}: Boolean value indicate if the action is ENDED_OK or ENDED_NOT_OK. Value of this variable should be OK, NOK or OTHER.
     ...    -${ServerPath}: This field specifies the path and file name to the Selenium standalone server.
     ...    -${TestSuiteFile}: This field specifies Name of the suite file with full path.
