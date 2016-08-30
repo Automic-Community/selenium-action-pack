@@ -305,7 +305,6 @@ Advanced Options (selenium-server-standalone-2.53):
 -port <nnnn>				: the port number the selenium server should use (default 4444).
 -timeout <nnnn>				: an integer number of seconds we should allow a client to be idle.
 -browserTimeout <nnnn>			: an integer number of seconds a browser is allowed to hang.
--interactive				: puts you into interactive mode.
 -singleWindow				: puts you into a mode where the test web site executes in a frame. This mode should only be selected if the application under test does not use frames.
 -profilesLocation			: Specifies the directory that holds the profiles that java clients can use to start up selenium. Currently supported for Firefox only.
 -forcedBrowserMode <browser>		: sets the browser mode to a single argument (e.g. "*iexplore") for all sessions, no matter what is passed to getNewBrowserSession.
@@ -325,9 +324,17 @@ Advanced Options (selenium-server-standalone-2.53):
 	-userJsInjection <file>				: specifies a JavaScript file which will then be injected into all pages.
 	-userContentTransformation <regex> <replacement>: a regular expression which is matched against all test HTML content; the second is a string which will replace matches. These flags can be used any number of times. A simple example of how this could be useful: if you add "-userContentTransformation https http" then all "https" strings in the HTML of the test application will be changed to be "http".
 
+Supported browsers include:
+  *firefoxchrome, *konqueror, *chrome, *safari, *piiexplore, *googlechrome, *firefox, *pifirefox, *iexploreproxy, *iehta, *firefoxproxy, *safariproxy, *iexplore, *mock, *webdriver, *custom
+
+Examples for usage of "Advanced options" :
+* If the user wants to run the test in the debug mode and set the timeout as 60 seconds : -debug -timeout 60
+* If the user wants to write the log information into a file(C:\temp\logs.txt) and change the port 	: -log C:\temp\logs.txt -port 4445
+
 Note : 
 * "Selenium server file" should be a jar file
 * "Test suite file" and "Test result file" file should be either of : html, htm, xhtml
+* If the test cases within the suite fails during execution, the action will not fail.
 
 = Failure Conditions =
 * If user provides a test suite file with extension other than .html or .htm or .xhtml.
@@ -336,13 +343,10 @@ Note :
 = Inputs =
 * Selenium server path		: Provide path and file name to the Selenium standalone server. E.g. E:\automic\selenium-server-standalone-2.53.1.jar
 * Test suite file		: Name of the suite file with full path. E.g. E:\automic\suite.html
-* Test result file 		: Name of the result file with full path. If not specified then default temporary path at agent will be used. E.g. E:\automic\result.html
+* Test result file 		: Name of the result file with full path. E:\automic\result.html.  If not specified then it will be created inside agent OS temp directory and publish the same <UC4RB_SLM_RESULT_FILE_PATH>.
 * Application URL		: Url to the Application Under Test. E.g. http://www.google.com
 * Browser			: Name of the browser in which you want to run test suite. It is case-sensitive. Default value is *firefox. E.g. *googlechrome, *iexplore, *safari 
 * Advanced options		: Provide additional options for this test execution. E.g. -timeout 60 -log "E:\automic\selenium\log.txt"
-* Sudo Password			: The password for the sudo command.
-* Options			: Run using sudo password (and sudo username if specified).
-* Sudo Username			: The username to be used for the sudo command.
 * Overwrite Agent		: Overwrites the default agent
 * Overwrite Login		: Overwrites the default login
 
@@ -350,11 +354,14 @@ Note :
 (none)
 
 = Return Value =
-(none)
+* UC4RB_SLM_RESULT_FILE_PATH 	: Test result file path on agent machine
+* UC4RB_SLM_TOTAL_TEST_CASES 	: Total number of test cases executed in a suite
+* UC4RB_SLM_PASSED_CASES 	: Total number of passed cases
+* UC4RB_SLM_FAILED_CASES	: Total number of failed cases
 
 = Outputs =
 * Return code is 0 in case of success.
-* Return code is 1 in case of failure.
+* Return code is non zero in case of failure.
 
 = Rollback =
 (none)
