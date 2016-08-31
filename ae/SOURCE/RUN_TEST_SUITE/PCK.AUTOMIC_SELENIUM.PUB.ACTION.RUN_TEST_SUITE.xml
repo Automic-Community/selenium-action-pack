@@ -55,7 +55,6 @@
 <node content="1" id="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE" name="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE" parent="PPRPTS" type="PPROMPTSET">
 <PROMPTSET name="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">
 <PRPTBOX promptset="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">
-<ELEMENT ReadFromTable="OPUD" altview="0" haslist="0" msginsert="" msgnr="" promptname="ELEMENT" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
 <UC4RB_SLM_AUT_URLs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_AUT_URL#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
 <UC4RB_SLM_BROWSERs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_BROWSER#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">*firefox</UC4RB_SLM_BROWSERs.00>
 <UC4RB_SLM_OPTIONSs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_OPTIONS#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
@@ -116,7 +115,6 @@
 <node content="1" id="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE" name="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE" parent="PPRPTS" type="PPROMPTSET">
 <PROMPTSET name="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">
 <PRPTBOX promptset="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">
-<ELEMENT ReadFromTable="OPUD" altview="0" haslist="0" msginsert="" msgnr="" promptname="ELEMENT" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
 <UC4RB_SLM_AUT_URLs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_AUT_URL#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
 <UC4RB_SLM_BROWSERs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_BROWSER#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">*firefox</UC4RB_SLM_BROWSERs.00>
 <UC4RB_SLM_OPTIONSs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_OPTIONS#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
@@ -140,30 +138,7 @@
 <calendars CCTypeAll="0" CCTypeExt="0" CCTypeNone="0" CCTypeOne="1" CaleOn="0"/>
 <postconditions>
 <PostCon>
-<conditions id="CONDITIONS">
-<condition active="1" id="USER DEFINED" once="0" type="C" uiinfo="">
-<params>
-<param altview="0" name="XC_P01" type="V" value="&amp;STATUS#"/>
-<param altview="0" name="XC_P02" type="V" value="&lt;&gt;"/>
-<param altview="0" name="XC_P03" type="V" value="0"/>
-</params>
-<when active="1" id="USER DEFINED" once="0" type="W" uiinfo="">
-<action active="1" id="EXECUTE OBJECT" once="0" type="A" uiinfo="">
-<params>
-<param altview="0" name="XC_P01" type="V" value="PCK.AUTOMIC_FILESYSTEM.PUB.ACTION.DELETE"/>
-<param altview="0" name="XC_P02" type="S" value="#915032:getobjprompt:0:3"/>
-<param altview="0" name="XC_P03" type="V" value="##911010">
-<param name="AGENTs.00" value="&amp;AGENT#" vname="XC_P03"/>
-<param name="LOGINs.00" value="&amp;LOGIN#" vname="XC_P03"/>
-<param name="UC4RB_DIR_FILE_RM_FAILs.00" value="NO" vname="XC_P03"/>
-<param name="UC4RB_DIR_FILE_RM_NAMEs.00" value="&amp;TEST_RESULT_FILE#" vname="XC_P03"/>
-</param>
-<param altview="0" name="XC_P04" type="V" value="DEL_FILE"/>
-</params>
-</action>
-</when>
-</condition>
-</conditions>
+<conditions id="CONDITIONS"/>
 </PostCon>
 </postconditions>
 </task>
@@ -186,7 +161,6 @@
 <node content="1" id="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE" name="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE" parent="PPRPTS" type="PPROMPTSET">
 <PROMPTSET name="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">
 <PRPTBOX promptset="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">
-<ELEMENT ReadFromTable="OPUD" altview="0" haslist="0" msginsert="" msgnr="" promptname="ELEMENT" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
 <UC4RB_SLM_AUT_URLs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_AUT_URL#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
 <UC4RB_SLM_BROWSERs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_BROWSER#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE">*firefox</UC4RB_SLM_BROWSERs.00>
 <UC4RB_SLM_OPTIONSs.00 ReadFromTable="OPSE" altview="0" haslist="0" msginsert="" msgnr="" promptname="UC4RB_SLM_OPTIONS#" promptsetname="PCK.AUTOMIC_SELENIUM.PRV.PROMPTSET.RUN_TEST_SUITE"/>
@@ -298,7 +272,7 @@
 PCK.AUTOMIC_SELENIUM.PUB.ACTION.RUN_TEST_SUITE
 
 = General description =
-This action is used to run a test suite on the specified browser.  User needs to provide atleast the Selenium server path, Test Suit file and Application URL to run a test suite. You can also provide any combination of advance options mentioned below in the "Advanced Options" field.
+This action is used to run a test suite on the specified browser. User needs to provide atleast the Selenium server path, Test Suite file and Application URL to run a test suite. You can also provide any combination of advance options mentioned below in the "Advanced Options" field.
 
 Advanced Options (selenium-server-standalone-2.53): 
 
@@ -335,6 +309,7 @@ Note :
 * "Selenium server file" should be a jar file
 * "Test suite file" and "Test result file" file should be either of : html, htm, xhtml
 * If the test cases within the suite fails during execution, the action will not fail.
+* If the "Test result file" exists on the given path, this action will overwrite the file.
 
 = Failure Conditions =
 * If user provides a test suite file with extension other than .html or .htm or .xhtml.
@@ -344,7 +319,7 @@ Note :
 * Selenium server path		: Provide path and file name to the Selenium standalone server. E.g. E:\automic\selenium-server-standalone-2.53.1.jar
 * Test suite file		: Name of the suite file with full path. E.g. E:\automic\suite.html
 * Test result file 		: Name of the result file with full path. E:\automic\result.html.  If not specified then it will be created inside agent OS temp directory and publish the same <UC4RB_SLM_RESULT_FILE_PATH>.
-* Application URL		: Url to the Application Under Test. E.g. http://www.google.com
+* Application URL		: URL to the Application Under Test. E.g. http://www.google.com
 * Browser			: Name of the browser in which you want to run test suite. It is case-sensitive. Default value is *firefox. E.g. *googlechrome, *iexplore, *safari 
 * Advanced options		: Provide additional options for this test execution. E.g. -timeout 60 -log "E:\automic\selenium\log.txt"
 * Overwrite Agent		: Overwrites the default agent

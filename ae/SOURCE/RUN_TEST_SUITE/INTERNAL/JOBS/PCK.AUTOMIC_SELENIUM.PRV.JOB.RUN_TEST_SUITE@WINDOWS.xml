@@ -57,7 +57,7 @@
 <WorkingDirectory>c:\</WorkingDirectory>
 <Command/>
 <LogOn>0</LogOn>
-<ShowJob>0</ShowJob>
+<ShowJob>1</ShowJob>
 </ATTR_WINDOWS>
 <RUNTIME state="1">
 <MaxRetCode>0</MaxRetCode>
@@ -163,19 +163,29 @@ SET ERROR=0
 !------------------------------------ Validation of files -----------------------------------------------------------------------------------
 
 ! ------------------ (Selenium server path)-------------------
-: SET &UC4RB_CHECKME# = &UC4RB_SLM_SERVER_FILE#
-: INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_FILE_EXISTS
+: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_SERVER_FILE#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &SERVER_PATH# = &UC4RB_ESCAPED_STRING#
+
+!check if file exists
+: SET &UC4RB_FILE_PATH# = &SERVER_PATH#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST
 
 ! -------------------- (Test suite file)------------------------
-: SET &UC4RB_CHECKME# = &UC4RB_SLM_SUITE_FILE#
-: INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_FILE_EXISTS
+: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_SUITE_FILE#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &SUITE_PATH# = &UC4RB_ESCAPED_STRING#
+
+!check if file exists
+: SET &UC4RB_FILE_PATH# = &SUITE_PATH#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST
 
 ! ---------------------(Test result file)---------------------
 : IF &UC4RB_SLM_RESULT_FILE# = ""
 !      getting the temp directory of agent
-:      SET &RESULT_TEMPFILE# = STR_CAT(&AGENT_TEMPDIR#,'testresult-&$RUNID#.html')
+:      PSET &RESULT_TEMPFILE# = STR_CAT(&AGENT_TEMPDIR#,'testresult-&$RUNID#.html')
 : ELSE
-:      SET &RESULT_TEMPFILE# = &UC4RB_SLM_RESULT_FILE#
+:      PSET &RESULT_TEMPFILE# = &UC4RB_SLM_RESULT_FILE#
 : ENDIF
 
 ! getting the directory where the result file should be created
@@ -184,17 +194,23 @@ SET ERROR=0
 : IF &POS# GT 0
 :     SET &LEN# = STR_LENGTH(&RESULT_TEMPFILE#)
 :     SET &POS# = &POS# - 1
-:     SET &UC4RB_CHECKME# = STR_CUT(&RESULT_TEMPFILE#,1,&POS#)
-!     check if the file path is valid
-:     INC PCK.AUTOMIC_FILESYSTEM.PRV.INCLUDE.CHECK_DIR_EXISTS
+
+!     check if the directory exist
+!     escape charcters
+:     SET &UC4RB_ESCAPED_STRING# = STR_CUT(&RESULT_TEMPFILE#,1,&POS#)
+:     INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+:     SET &UC4RB_FILE_PATH# = &UC4RB_ESCAPED_STRING#
+:     INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST
+
 : ELSE
 :     STOP MSG, 51, "Invalid directory [&RESULT_TEMPFILE#]"
 : ENDIF
 
-! escape charcters
+! escaping characters
 : SET &UC4RB_ESCAPED_STRING# = &RESULT_TEMPFILE#
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
-: PSET &TEST_RESULT_FILE# = &UC4RB_ESCAPED_STRING#
+: SET &TEST_RESULT_FILE# = &UC4RB_ESCAPED_STRING#
+
 
 ! change all the "\\" to "\"
 : SET &DEL_FILE# = &TEST_RESULT_FILE#
@@ -220,30 +236,20 @@ SET ERROR=0
 !---------------------------------- Creating command to execute test suite ------------------------------
 
 ! preparing command to run a test suite
-: SET &UC4RB_SLM_RUN_CMD# = "java -jar"
-
-! Selenium server path
-: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_SERVER_FILE#
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
-: SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING#")
+: SET &UC4RB_SLM_RUN_CMD# = "java -jar &SERVER_PATH#"
 
 ! Browser
 : SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_BROWSER#
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
 : SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " -htmlSuite &UC4RB_ESCAPED_STRING#")
 
-! AUT URL
+! AUT URL, Test suite file, test result file, advanced options
 : SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_AUT_URL#
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
-: SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING#")
-
-! Test suite file, test result file, advanced options
-: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_SUITE_FILE#
-: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
-: SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING# &TEST_RESULT_FILE# &UC4RB_SLM_OPTIONS#")
+: SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING# &SUITE_PATH# &TEST_RESULT_FILE# &UC4RB_SLM_OPTIONS#")
 
   echo  CMDLET: &UC4RB_SLM_RUN_CMD#
-  &UC4RB_SLM_RUN_CMD#
+  cmd /c &UC4RB_SLM_RUN_CMD#
 
 !--------------------------------get absolute path, check error and if the result file exist------------------------
 ! Check if result file exist
@@ -252,9 +258,10 @@ SET ERROR=0
      goto :endfile
  )
 
-!check its size
+!check its size and delete the file, if there is no content in it
  call :setsize &TEST_RESULT_FILE#
  IF %SIZE% LEQ 0 (
+     del &DEL_FILE#
      SET ERROR=1
      goto :endfile
   )
@@ -280,7 +287,8 @@ SET ERROR=0
 
 !-------------------------------------------SUCCESS MESSAGE-------------------------------------------------------------------------------
 : SET &UC4RB_LOGGING_INFO# = "******** RUN TEST SUITE ACTION EXECUTED SUCCESSFULLY ********"
-: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO]]></MSCRI>
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO
+]]></MSCRI>
 </SCRIPT>
 <OUTPUTSCAN state="1">
 <Inherit>N</Inherit>
@@ -295,15 +303,13 @@ SET ERROR=0
 :   PSET &UC4RB_SLM_TOTAL_TEST_CASES# =""
 :   PSET &UC4RB_SLM_PASSED_CASES# =""
 :   PSET &UC4RB_SLM_FAILED_CASES# =""
-:PSET &STATUS# = GET_UC_OBJECT_STATUS(,,"RETCODE")
+:SET &STATUS# = GET_UC_OBJECT_STATUS(,,"RETCODE")
 :IF &STATUS#  = 0
 !      get the report file
 :      SET &HND# = PREP_PROCESS_REPORT("JOBS",, "REP","UC4RB_SLM_RESULT_FILE_PATH*","COL=DELIMITER", 'DELIMITER=*::=*')
 :      PROCESS &HND#
 :             SET &KEY# = GET_PROCESS_LINE(&HND#,1)
 :             SET &VALUE# = GET_PROCESS_LINE(&HND#,2)
-:             p "key : &KEY#"
-:             p "val : &VALUE#"
 :             IF &KEY# = "UC4RB_SLM_RESULT_FILE_PATH"
 :                   SET &UC4RB_SLM_RESULT_FILE_PATH# = "&VALUE#"
 :                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"WORKFLOW"
