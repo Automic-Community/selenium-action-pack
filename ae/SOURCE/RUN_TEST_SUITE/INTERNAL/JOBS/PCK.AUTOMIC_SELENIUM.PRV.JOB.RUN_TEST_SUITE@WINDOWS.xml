@@ -280,9 +280,10 @@ SET ERROR=0
 : INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
 
 !-------------------------------------------SUCCESS MESSAGE-------------------------------------------------------------------------------
+
+SET ERRORLEVEL=%ERROR%
 : SET &UC4RB_LOGGING_INFO# = "******** RUN TEST SUITE ACTION EXECUTED SUCCESSFULLY ********"
-: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO
-]]></MSCRI>
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO]]></MSCRI>
 </SCRIPT>
 <OUTPUTSCAN state="1">
 <Inherit>N</Inherit>
