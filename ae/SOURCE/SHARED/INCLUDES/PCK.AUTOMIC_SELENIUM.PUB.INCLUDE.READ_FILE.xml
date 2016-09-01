@@ -9,6 +9,7 @@
 <SCRIPT mode="1" state="1">
 <MSCRI><![CDATA[! Reading xml file and pleace it in one AE variable
 :SET &HND1# = PREP_PROCESS_FILE (&AGENT#, "&UC4RB_SLM_FILE_PATH#",,"COL=NONE", 'UC_LOGIN=&LOGIN#')
+
 :SET &UC4RB_SLM_FILE_CONTENT# = ""
 :PROCESS &HND1#
 :   SET &LINE# = GET_PROCESS_LINE(&HND1#)

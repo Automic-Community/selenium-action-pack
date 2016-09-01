@@ -31,7 +31,7 @@ Selenium Server Standalone 2.53
 Following actions are supported:
 
 * Action Name: PCK.AUTOMIC_SELENIUM.PUB.ACTION.RUN_TEST_SUITE
-* Action Description: This action is used to run a test suite on the specified browser. User can give options other than -htmlsuite in the "Advanced Options" section.]]></DOC>
+* Action Description: This action is used to run a test suite on the specified browser. You can also provide any combination of advance options mentioned below in the "Advanced Options" field.]]></DOC>
 </DOCU_Docu>
 </DOCU>
 </uc-export>

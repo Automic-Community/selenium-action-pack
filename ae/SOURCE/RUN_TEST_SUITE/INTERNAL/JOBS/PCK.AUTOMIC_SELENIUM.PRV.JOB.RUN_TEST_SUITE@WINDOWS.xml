@@ -258,8 +258,8 @@ SET ERROR=0
      goto :endfile
  )
 
-!check its size and delete the file, if there is no content in it
- call :setsize &TEST_RESULT_FILE#
+!check its size and delete the file, if there isn't any content
+ For %%A in (&TEST_RESULT_FILE#) do set SIZE=%%~zA
  IF %SIZE% LEQ 0 (
      del &DEL_FILE#
      SET ERROR=1
@@ -267,17 +267,11 @@ SET ERROR=0
   )
 
 !get the absolute path
- call :getabsolutefile "&RESULT_TEMPFILE#"
- goto :endfile
-
- :setsize
-     set SIZE=%~z1
-     EXIT /B 0
-
- :getabsolutefile
-     SET OUTPUTFILEPATH=%~f1
-     echo UC4RB_SLM_RESULT_FILE_PATH::=%OUTPUTFILEPATH%
-     EXIT /B 0
+ For %%i in (&TEST_RESULT_FILE#) do set OUTPUTFILEPATH="%%~fi"
+! handling charcter ^ for echo
+ set _temp=%OUTPUTFILEPATH:^=^^%
+ For %%i in (%_temp%) do set OUTPUTFILEPATH=%%~i
+ echo UC4RB_SLM_RESULT_FILE_PATH::=%OUTPUTFILEPATH%
 
  :endfile
 
@@ -311,7 +305,7 @@ SET ERROR=0
 :             SET &KEY# = GET_PROCESS_LINE(&HND#,1)
 :             SET &VALUE# = GET_PROCESS_LINE(&HND#,2)
 :             IF &KEY# = "UC4RB_SLM_RESULT_FILE_PATH"
-:                   SET &UC4RB_SLM_RESULT_FILE_PATH# = "&VALUE#"
+:                   SET &UC4RB_SLM_RESULT_FILE_PATH# = &VALUE#
 :                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"WORKFLOW"
 
 !                    Publishing total no. of cases, successful cases and failure cases
