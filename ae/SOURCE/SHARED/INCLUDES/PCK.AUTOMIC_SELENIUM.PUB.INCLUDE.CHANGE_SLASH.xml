@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
+<JOBI name="PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHANGE_SLASH">
+<HEADER state="1">
+<Title>change double slash to single slash</Title>
+<ArchiveKey1/>
+<ArchiveKey2/>
+<OH_SubType/>
+</HEADER>
+<SCRIPT mode="1" state="1">
+<MSCRI><![CDATA[: SET &CHECK_SLASH# = 1
+: WHILE &CHECK_SLASH# GT 0
+:      SET &POS# = STR_FIND(&FILEPATH#,"\\")
+:      IF &POS# GT 0
+:             SET &FILEPATH# = STR_SUB(&FILEPATH#, "\\", "\")
+:      ELSE
+:            SET &CHECK_SLASH#=0
+:      ENDIF
+: ENDWHILE]]></MSCRI>
+</SCRIPT>
+<DOCU_Docu state="1" type="text">
+<DOC/>
+</DOCU_Docu>
+</JOBI>
+</uc-export>

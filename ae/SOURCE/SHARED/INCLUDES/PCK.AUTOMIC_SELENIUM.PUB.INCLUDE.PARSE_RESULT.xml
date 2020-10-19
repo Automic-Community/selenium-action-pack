@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
+<JOBI name="PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT">
+<HEADER state="1">
+<Title>Get the node and its value from html, htm, xhtml</Title>
+<ArchiveKey1/>
+<ArchiveKey2/>
+<OH_SubType/>
+</HEADER>
+<SCRIPT mode="1" state="1">
+<MSCRI><![CDATA[: SET &UC4RB_SLM_VALUE# = ""
+! sample content <tr><td>NODE</td><td>VALUE</td></tr>
+! Find the position where "<td>NODE</td>" is found
+: SET &POS# = STR_FIND(&UC4RB_SLM_CONTENT#,&UC4RB_SLM_NODE#)
+: SET &POS# = CONVERT(unsigned,&POS#)
+: IF &POS# GT 0
+!      get the total length of the "<td>NODE</td>" and set the start position = found position + total length of "<td>NODE</td>" + 4(length of <td>)
+:      SET &LENGTH# = STR_LENGTH(&UC4RB_SLM_NODE#)
+:      SET &START_POS# = &POS# + &LENGTH# + 4
+
+!      get the substring for the value against the node = VALUE</td></tr>
+:      SET &VALUE# = SUBSTR(&UC4RB_SLM_CONTENT#,&START_POS#)
+:      SET &VALUE_POS# = STR_FIND(&VALUE#,"</td>")
+:      SET &VALUE_POS# = CONVERT(unsigned,&VALUE_POS#)
+:      IF &VALUE_POS# GT 0
+:            SET &END_POS# = &VALUE_POS# - 1
+!            get the value = VALUE
+:            SET &UC4RB_SLM_VALUE# = SUBSTR(&VALUE#,1,&END_POS#)
+:      ENDIF
+: ENDIF]]></MSCRI>
+</SCRIPT>
+<DOCU_Docu state="1" type="text">
+<DOC><![CDATA[This include is used to parse the html/htm/xhtml file and get the value for the given tag.]]></DOC>
+</DOCU_Docu>
+</JOBI>
+</uc-export>

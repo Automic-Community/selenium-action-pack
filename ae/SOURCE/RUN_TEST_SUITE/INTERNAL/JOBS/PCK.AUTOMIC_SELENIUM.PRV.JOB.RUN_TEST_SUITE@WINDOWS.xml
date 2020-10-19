@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
+<JOBS_WINDOWS AttrType="WINDOWS" name="PCK.AUTOMIC_SELENIUM.PRV.JOB.RUN_TEST_SUITE@WINDOWS">
+<XHEADER state="1">
+<Title>Run test suite</Title>
+<ArchiveKey1/>
+<ArchiveKey2/>
+<Active>1</Active>
+<OH_SubType/>
+<CustomAttributes KeyListID="0" dataRequestID="0"/>
+</XHEADER>
+<OUTPUTREG state="1">
+<FileReg/>
+</OUTPUTREG>
+<SYNCREF state="1">
+<Syncs/>
+</SYNCREF>
+<ATTR_JOBS state="1">
+<Queue>CLIENT_QUEUE</Queue>
+<StartType/>
+<HostDst>|&lt;WIN&gt;|HOST</HostDst>
+<HostATTR_Type>WINDOWS</HostATTR_Type>
+<CodeName/>
+<Login/>
+<IntAccount/>
+<ExtRepDef>1</ExtRepDef>
+<ExtRepAll>0</ExtRepAll>
+<ExtRepNone>0</ExtRepNone>
+<AutoDeactNo>0</AutoDeactNo>
+<AutoDeact1ErrorFree>0</AutoDeact1ErrorFree>
+<AutoDeactErrorFree>0</AutoDeactErrorFree>
+<DeactWhen/>
+<DeactDelay>0</DeactDelay>
+<AutoDeactAlways>1</AutoDeactAlways>
+<AttDialog>0</AttDialog>
+<ActAtRun>0</ActAtRun>
+<Consumption>0</Consumption>
+<UC4Priority>0</UC4Priority>
+<MaxParallel2>0</MaxParallel2>
+<MpElse1>1</MpElse1>
+<MpElse2>0</MpElse2>
+<TZ/>
+</ATTR_JOBS>
+<ATTR_WINDOWS state="1">
+<OutputDb>1</OutputDb>
+<OutputDbErr>0</OutputDbErr>
+<OutputFile>0</OutputFile>
+<IsGenerated>0</IsGenerated>
+<BAT>1</BAT>
+<COM>0</COM>
+<WinBatch>0</WinBatch>
+<Standard>1</Standard>
+<Minimized>0</Minimized>
+<Maximized>0</Maximized>
+<JObjDefault>1</JObjDefault>
+<JObjYes>0</JObjYes>
+<JObjNo>0</JObjNo>
+<WorkingDirectory>c:\</WorkingDirectory>
+<Command/>
+<LogOn>0</LogOn>
+<ShowJob>1</ShowJob>
+</ATTR_WINDOWS>
+<RUNTIME state="1">
+<MaxRetCode>0</MaxRetCode>
+<MrcExecute/>
+<MrcElseE>0</MrcElseE>
+<FcstStatus>0| |</FcstStatus>
+
+<ErtMethodDef>1</ErtMethodDef>
+<ErtMethodFix>0</ErtMethodFix>
+<ErtFix>0</ErtFix>
+<ErtDynMethod>2|Average</ErtDynMethod>
+<ErtMethodDyn>0</ErtMethodDyn>
+<ErtCnt>0</ErtCnt>
+<ErtCorr>0</ErtCorr>
+<ErtIgn>0</ErtIgn>
+<ErtIgnFlg>0</ErtIgnFlg>
+<ErtMinCnt>0</ErtMinCnt>
+<MrtMethodNone>1</MrtMethodNone>
+<MrtMethodFix>0</MrtMethodFix>
+<MrtFix>0</MrtFix>
+<MrtMethodErt>0</MrtMethodErt>
+<MrtErt>0</MrtErt>
+<MrtMethodDate>0</MrtMethodDate>
+<MrtDays>0</MrtDays>
+<MrtTime>00:00</MrtTime>
+<MrtTZ/>
+<SrtMethodNone>1</SrtMethodNone>
+<SrtMethodFix>0</SrtMethodFix>
+<SrtFix>0</SrtFix>
+<SrtMethodErt>0</SrtMethodErt>
+<SrtErt>0</SrtErt>
+<MrtCancel>0</MrtCancel>
+<MrtExecute>0</MrtExecute>
+<MrtExecuteObj/>
+</RUNTIME>
+<DYNVALUES state="1">
+<dyntree>
+<node content="1" id="VALUE" name="Variables" parent="" type="VALUE">
+<VALUE state="1">
+<Values/>
+<Mode>0</Mode>
+</VALUE>
+</node>
+</dyntree>
+</DYNVALUES>
+<ROLLBACK state="1">
+<RollbackFlag>0</RollbackFlag>
+<CBackupObj/>
+<CRollbackObj/>
+<FBackupPath/>
+<FDeleteBefore>0</FDeleteBefore>
+<FInclSubDirs>0</FInclSubDirs>
+</ROLLBACK>
+<PRE_SCRIPT mode="1" replacementmode="1" state="1">
+<PSCRI><![CDATA[:INC PCK.ITPA_SHARED.PUB.INCLUDE.START_STOP_JOB_ACCORDING_TO_AGENT_OS]]></PSCRI>
+</PRE_SCRIPT>
+<SCRIPT mode="1" state="1">
+<MSCRI><![CDATA[@echo off
+SET ERROR=0
+
+!------------------------------------------ LOGGING INPUT PARAMETERS --------------------------------------------------------------
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.HEADER.PARAM_VALIDATION
+
+! Selenium server path
+: SET &UC4RB_LOGGING_PARAMETER# = "Selenium server path"
+: SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_SERVER_FILE#"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
+
+! Test suite file
+: SET &UC4RB_LOGGING_PARAMETER# = "Test suite file"
+: SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_SUITE_FILE#"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
+
+! Test result file
+: SET &UC4RB_LOGGING_PARAMETER# = "Test result file"
+: SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_RESULT_FILE#"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
+
+! Application URL
+: SET &UC4RB_LOGGING_PARAMETER# = "Application URL"
+: SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_AUT_URL#"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
+
+! Browser
+: SET &UC4RB_LOGGING_PARAMETER# = "Browser"
+: SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_BROWSER#"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
+
+! Advanced options
+: SET &UC4RB_LOGGING_PARAMETER# = "Advanced options"
+: SET &UC4RB_LOGGING_PARAMETER_VAL# = "&UC4RB_SLM_OPTIONS#"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.PARAM
+
+! logging start of execution
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.HEADER.EXECUTION
+
+!------------------changing the directory to agent's temp directory------------------------------------------------
+: SET &AGENT_TEMPDIR# = GET_VAR('UC_EX_PATH_TEMP', &AGENT#)
+  cd /d "&AGENT_TEMPDIR#"
+: SET &UC4RB_LOGGING_ERROR# = "Unable to change the directory to agent's temp directory"
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
+
+!------------------------------------ Validation of files -----------------------------------------------------------------------------------
+
+! ------------------ (Selenium server path)-------------------
+: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_SERVER_FILE#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &SERVER_PATH# = &UC4RB_ESCAPED_STRING#
+
+!check if file exists
+: SET &UC4RB_FILE_PATH# = &SERVER_PATH#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST
+
+! -------------------- (Test suite file)------------------------
+: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_SUITE_FILE#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &SUITE_PATH# = &UC4RB_ESCAPED_STRING#
+
+!check if file exists
+: SET &UC4RB_FILE_PATH# = &SUITE_PATH#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST
+
+! ---------------------(Test result file)---------------------
+: IF &UC4RB_SLM_RESULT_FILE# = ""
+!      getting the temp directory of agent
+:      PSET &RESULT_TEMPFILE# = STR_CAT(&AGENT_TEMPDIR#,'testresult-&$RUNID#.html')
+: ELSE
+:      PSET &RESULT_TEMPFILE# = &UC4RB_SLM_RESULT_FILE#
+: ENDIF
+
+! getting the directory where the result file should be created
+: SET &RESULT_TEMPFILE# = STR_SUB(&RESULT_TEMPFILE#, "/", "\")
+: SET &POS# = STR_FIND_REVERSE(&RESULT_TEMPFILE#,"\")
+: IF &POS# GT 0
+:     SET &LEN# = STR_LENGTH(&RESULT_TEMPFILE#)
+:     SET &POS# = &POS# - 1
+
+!     check if the directory exist
+!     escape charcters
+:     SET &UC4RB_ESCAPED_STRING# = STR_CUT(&RESULT_TEMPFILE#,1,&POS#)
+:     INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+:     SET &UC4RB_FILE_PATH# = &UC4RB_ESCAPED_STRING#
+:     INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST
+
+: ELSE
+:     STOP MSG, 51, "Invalid directory [&RESULT_TEMPFILE#]"
+: ENDIF
+
+! escaping characters
+: SET &UC4RB_ESCAPED_STRING# = &RESULT_TEMPFILE#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &TEST_RESULT_FILE# = &UC4RB_ESCAPED_STRING#
+
+
+! change all the "\\" to "\"
+: SET &DEL_FILE# = &TEST_RESULT_FILE#
+: SET &CHECK_SLASH# = 1
+: WHILE &CHECK_SLASH# GT 0
+:      SET &POS# = STR_FIND(&DEL_FILE#,"\\")
+:      IF &POS# GT 0
+:             SET &DEL_FILE# = STR_SUB(&DEL_FILE#, "\\", "\")
+:      ELSE
+:            SET &CHECK_SLASH#=0
+:      ENDIF
+: ENDWHILE
+
+! delete the file if it already exists
+  IF EXIST &DEL_FILE# (
+      del &DEL_FILE#
+  )
+  SET ERROR=%ERRORLEVEL%
+
+: SET &UC4RB_LOGGING_ERROR# = "Unable to delete the test result file."
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
+
+!---------------------------------- Creating command to execute test suite ------------------------------
+
+! preparing command to run a test suite
+: SET &UC4RB_SLM_RUN_CMD# = "java -jar &SERVER_PATH#"
+
+! Browser
+: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_BROWSER#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " -htmlSuite &UC4RB_ESCAPED_STRING#")
+
+! AUT URL, Test suite file, test result file, advanced options
+: SET &UC4RB_ESCAPED_STRING# = &UC4RB_SLM_AUT_URL#
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.ESCAPE_ARG_VALUE
+: SET &UC4RB_SLM_RUN_CMD# = STR_CAT(&UC4RB_SLM_RUN_CMD#, " &UC4RB_ESCAPED_STRING# &SUITE_PATH# &TEST_RESULT_FILE# &UC4RB_SLM_OPTIONS#")
+
+  echo  CMDLET: &UC4RB_SLM_RUN_CMD#
+  cmd /c &UC4RB_SLM_RUN_CMD#
+
+!--------------------------------get absolute path, check error and if the result file exist------------------------
+! Check if result file exist
+ IF NOT EXIST &TEST_RESULT_FILE# (
+     SET ERROR=1
+     goto :endfile
+ )
+
+!check its size and delete the file, if there isn't any content
+ For %%A in (&TEST_RESULT_FILE#) do set SIZE=%%~zA
+ IF %SIZE% LEQ 0 (
+     del &DEL_FILE#
+     SET ERROR=1
+     goto :endfile
+  )
+
+!get the absolute path
+ For %%i in (&TEST_RESULT_FILE#) do set OUTPUTFILEPATH="%%~fi"
+! handling charcter ^ for echo
+ set _temp=%OUTPUTFILEPATH:^=^^%
+ For %%i in (%_temp%) do set OUTPUTFILEPATH=%%~i
+ echo UC4RB_SLM_RESULT_FILE_PATH::=%OUTPUTFILEPATH%
+
+ :endfile
+
+!-------------------------------------------ERROR MESSAGE-------------------------------------------------------------------------------
+: SET &UC4RB_LOGGING_ERROR# = "******** RUN TEST SUITE ACTION FAILED ********"
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE
+
+!-------------------------------------------SUCCESS MESSAGE-------------------------------------------------------------------------------
+
+SET ERRORLEVEL=%ERROR%
+: SET &UC4RB_LOGGING_INFO# = "******** RUN TEST SUITE ACTION EXECUTED SUCCESSFULLY ********"
+: INC PCK.ITPA_SHARED.PRV.INCLUDE.LOGGING.INFO]]></MSCRI>
+</SCRIPT>
+<OUTPUTSCAN state="1">
+<Inherit>N</Inherit>
+<filterobjects/>
+<HostFsc/>
+<LoginFsc/>
+</OUTPUTSCAN>
+<POST_SCRIPT mode="1" replacementmode="1" state="1">
+<OSCRI><![CDATA[! Publishing output file path in case of success
+
+:   PSET &UC4RB_SLM_RESULT_FILE_PATH# = ""
+:   PSET &UC4RB_SLM_TOTAL_TEST_CASES# =""
+:   PSET &UC4RB_SLM_PASSED_CASES# =""
+:   PSET &UC4RB_SLM_FAILED_CASES# =""
+:SET &STATUS# = GET_UC_OBJECT_STATUS(,,"RETCODE")
+:IF &STATUS#  = 0
+!      get the report file
+:      SET &HND# = PREP_PROCESS_REPORT("JOBS",, "REP","UC4RB_SLM_RESULT_FILE_PATH*","COL=DELIMITER", 'DELIMITER=*::=*')
+:      PROCESS &HND#
+:             SET &KEY# = GET_PROCESS_LINE(&HND#,1)
+:             SET &VALUE# = GET_PROCESS_LINE(&HND#,2)
+:             IF &KEY# = "UC4RB_SLM_RESULT_FILE_PATH"
+:                   SET &UC4RB_SLM_RESULT_FILE_PATH# = &VALUE#
+:                   PUBLISH &UC4RB_SLM_RESULT_FILE_PATH#,,"WORKFLOW"
+
+!                    Publishing total no. of cases, successful cases and failure cases
+:                    SET &UC4RB_SLM_FILE_PATH# = &UC4RB_SLM_RESULT_FILE_PATH#
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.READ_FILE
+
+:                    SET &UC4RB_SLM_CONTENT# = &UC4RB_SLM_FILE_CONTENT#
+
+!                    get total number of test cases executed
+:                    SET &UC4RB_SLM_NODE# = "<td>numTestTotal:</td>"
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
+:                    SET &UC4RB_SLM_TOTAL_TEST_CASES# = &UC4RB_SLM_VALUE#
+:                    PUBLISH &UC4RB_SLM_TOTAL_TEST_CASES#,,"WORKFLOW"
+
+!                    get total number of cases that has passed
+:                    SET &UC4RB_SLM_NODE# = "<td>numTestPasses:</td>"
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
+:                    SET &UC4RB_SLM_PASSED_CASES# = &UC4RB_SLM_VALUE#
+:                    PUBLISH &UC4RB_SLM_PASSED_CASES#,,"WORKFLOW"
+
+!                    get total number of cases that has failed
+:                    SET &UC4RB_SLM_NODE# = "<td>numTestFailures:</td>"
+:                    INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.PARSE_RESULT
+:                    SET &UC4RB_SLM_FAILED_CASES# = &UC4RB_SLM_VALUE#
+:                    PUBLISH &UC4RB_SLM_FAILED_CASES#,,"WORKFLOW"
+
+:                   TERM_PROCESS
+:             ENDIF
+:      ENDPROCESS
+:      CLOSE_PROCESS &HND#
+:ENDIF]]></OSCRI>
+</POST_SCRIPT>
+<DOCU_Docu state="1" type="text">
+<DOC/>
+</DOCU_Docu>
+</JOBS_WINDOWS>
+</uc-export>

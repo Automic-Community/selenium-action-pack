@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?><uc-export clientvers="11.0.0">
+<JOBI name="PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_DIR_FILE_EXIST">
+<HEADER state="1">
+<Title>check if the file exist</Title>
+<ArchiveKey1/>
+<ArchiveKey2/>
+<OH_SubType/>
+</HEADER>
+<SCRIPT mode="1" state="1">
+<MSCRI><![CDATA[IF NOT EXIST &UC4RB_FILE_PATH# (
+      SET ERROR=1
+)
+
+: SET &UC4RB_LOGGING_ERROR# = "Invalid file or directory [&UC4RB_FILE_PATH#]"
+: INC PCK.AUTOMIC_SELENIUM.PUB.INCLUDE.CHECK_CMD_RETCODE]]></MSCRI>
+</SCRIPT>
+<DOCU_Docu state="1" type="text">
+<DOC/>
+</DOCU_Docu>
+</JOBI>
+</uc-export>
